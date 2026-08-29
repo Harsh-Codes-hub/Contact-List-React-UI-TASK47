@@ -7,7 +7,7 @@ const App = () => {
 const [user, setUser] = useState(getUser());
   return (
     <>
-      {user ? <NormalEntry /> : <FirstEntry setUser={setUser} />}
+      {user ? <NormalEntry user={user} /> : <FirstEntry setUser={setUser} />}
     </>
   );
 };
