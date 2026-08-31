@@ -3,8 +3,8 @@ import Input from "./Input";
 import inputData from "../data/inputData";
 import { saveUser } from "../utils/storage";
 
-const CreateContact = ({ headline, favBtn, setUser }) => {
-  const initialFormData = {
+const CreateContact = ({ headline, favBtn, setUser, mode, saveContact }) => {
+  const initialUserFormData = {
     firstName: "",
     surname: "",
     imageURL: "",
@@ -12,7 +12,21 @@ const CreateContact = ({ headline, favBtn, setUser }) => {
     phNo: "",
     email: "",
   };
-  const [formData, setFormData] = useState(initialFormData);
+
+  const initialContactFormData = {
+    firstName: "",
+    surname: "",
+    imageURL: "",
+    purpose: "",
+    phNo: "",
+    email: "",
+    fav: false,
+  };
+
+  const initialFormData =
+    mode === "user" ? initialUserFormData : initialContactFormData;
+
+  const [formData, setFormData] = useState(initialUserFormData);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,8 +47,12 @@ const CreateContact = ({ headline, favBtn, setUser }) => {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    saveUser(formData);
-    setUser(formData);
+    if (mode === "user") {
+      saveUser(formData);
+      setUser(formData);
+    } else {
+      saveContact(formData);
+    }
 
     setFormData(initialFormData);
   };

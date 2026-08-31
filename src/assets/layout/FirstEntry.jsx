@@ -7,6 +7,7 @@ const FirstEntry = ({ setUser }) => {
         headline={"Create My contact"}
         favBtn={false}
         setUser={setUser}
+        mode={"user"}
       />
     </main>
   );
