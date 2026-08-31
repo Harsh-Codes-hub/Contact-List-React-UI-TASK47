@@ -3,7 +3,7 @@ import Input from "./Input";
 import inputData from "../data/inputData";
 import { saveUser } from "../utils/storage";
 
-const CreateContact = ({ headline, favBtn, setUser, mode, saveContact }) => {
+const CreateContact = ({ headline, favBtn, setUser, mode, saveContact, onClose }) => {
   const initialUserFormData = {
     firstName: "",
     surname: "",
@@ -26,7 +26,7 @@ const CreateContact = ({ headline, favBtn, setUser, mode, saveContact }) => {
   const initialFormData =
     mode === "user" ? initialUserFormData : initialContactFormData;
 
-  const [formData, setFormData] = useState(initialUserFormData);
+  const [formData, setFormData] = useState(initialFormData);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -57,16 +57,31 @@ const CreateContact = ({ headline, favBtn, setUser, mode, saveContact }) => {
     setFormData(initialFormData);
   };
 
+  const favoriteHandler = () => {
+    setFormData((prev) => ({
+      ...prev,
+      fav: !prev.fav,
+    }));
+  };
+
   return (
     <form className="h-dvh w-75 mx-auto py-2" onSubmit={submitHandler}>
       <header className="flex items-center">
-        <button type="button" className="mr-2 text-2xl">
-          <i className="ri-arrow-left-s-line"></i>
-        </button>
+        {mode === "user" ? (
+          <></>
+        ) : (
+          <button type="button" className="mr-2 text-2xl" onClick={() => onClose(false)}>
+            <i className="ri-arrow-left-s-line"></i>
+          </button>
+        )}
         <h1 className="mr-auto text-md font-medium">{headline}</h1>
         {favBtn ? (
-          <button type="button" className="mr-2 text-md">
-            <i className="ri-star-line"></i>
+          <button
+            type="button"
+            className="mr-2 text-md"
+            onClick={favoriteHandler}
+          >
+            <i className={formData.fav ? "ri-star-fill" : "ri-star-line"}></i>
           </button>
         ) : (
           <></>
