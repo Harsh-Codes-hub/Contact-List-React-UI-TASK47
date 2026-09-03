@@ -76,7 +76,7 @@ const NormalEntry = ({ user }) => {
   return (
     <section className="w-75 mx-auto py-1 px-2">
       {showCreateContact && (
-        <div className="fixed inset-0 z-50 bg-slate-950 scrollbar-none">
+        <div className="fixed inset-0 z-50 bg-gray-950 scrollbar-none">
           <CreateContact
             headline="Create Contact"
             favBtn={true}
@@ -88,7 +88,7 @@ const NormalEntry = ({ user }) => {
       )}
 
       {selectedContact && (
-        <div className="fixed inset-0 z-50 bg-slate-950">
+        <div className="fixed inset-0 z-50 bg-gray-950">
           <ContactProfile
             contact={selectedContact}
             onClose={() => setSelectedContact(null)}

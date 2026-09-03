@@ -13,7 +13,7 @@ const ContactCard = ({ firstName, surname, imageURL, phNo, onClick }) => {
           className="aspect-square h-8 rounded-full object-center object-cover"
         />
       ) : (
-        <UserAvatar name={firstName} />
+        <UserAvatar name={firstName} imageHeight={8} />
       )}
       <div className="mr-auto flex flex-col">
         <h2 className="text-nowrap">{`${firstName} ${surname}`}</h2>

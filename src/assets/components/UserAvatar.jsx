@@ -1,4 +1,4 @@
-const UserAvatar = ({name}) => {
+const UserAvatar = ({ name, imageHeight, textSize = "text-lg" }) => {
   const avatarColors = [
     "bg-red-500",
     "bg-blue-500",
@@ -11,9 +11,9 @@ const UserAvatar = ({name}) => {
 
   return (
     <div
-      className={`aspect-square h-8 rounded-full flex items-center justify-center ${avatarColors[colorIndex]}`}
+      className={`aspect-square h-${imageHeight} rounded-full flex items-center justify-center ${avatarColors[colorIndex]}`}
     >
-      {name?.[0]?.toUpperCase()}
+      <span className={`${textSize} font-semibold`}>{name?.[0]?.toUpperCase()}</span>
     </div>
   );
 };
