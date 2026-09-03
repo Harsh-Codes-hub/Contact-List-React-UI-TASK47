@@ -1,15 +1,15 @@
 import ContactCard from "./ContactCard";
 
-const ContactList = ({ headline, users }) => {
+const ContactList = ({ headline, users, onContactClick }) => {
   return (
     <section>
-      <h3>{headline}</h3>
+      <h3 className="my-1">{headline}</h3>
 
       <ul className="flex flex-col gap-2">
         {users.length ? (
-          users.map((user, idx) => (
-            <li key={idx}>
-              <ContactCard {...user} />
+          users.map((user) => (
+            <li key={user.id}>
+              <ContactCard {...user} onClick={() => onContactClick(user)} />
             </li>
           ))
         ) : (

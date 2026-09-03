@@ -1,16 +1,76 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getContacts, saveContacts } from "../utils/storage";
+
 import ContactCard from "../components/ContactCard";
 import ContactList from "../components/ContactList";
 import CreateContact from "../components/CreateContact";
-import { getContacts } from "../utils/storage";
+import ContactProfile from "../components/ContactProfile";
 
 const NormalEntry = ({ user }) => {
   const [searchInput, setSearchInput] = useState("");
   const [allContacts, setAllContacts] = useState(getContacts());
   const [showCreateContact, setShowCreateContact] = useState(false);
+  const [descending, setDescending] = useState(false);
+  const [selectedContact, setSelectedContact] = useState(null);
+
+  const saveNewContact = (contact) => {
+    const newContact = {
+      ...contact,
+      id: crypto.randomUUID(),
+    };
+
+    const updatedContacts = [...allContacts, newContact];
+
+    setAllContacts(updatedContacts);
+    saveContacts(updatedContacts);
+  };
 
   const searchInputHandler = (e) => {
     setSearchInput(e.target.value);
+  };
+
+  const getGroup = (firstName) => {
+    const firstChar = firstName.trim().charAt(0).toUpperCase();
+
+    if (/^[A-Z]$/.test(firstChar)) {
+      return firstChar;
+    }
+
+    if (/^[0-9]$/.test(firstChar)) {
+      return firstChar;
+    }
+
+    return "#";
+  };
+
+  useEffect(() => {
+    console.log(allContacts);
+  }, [allContacts]);
+
+  const fav = allContacts.filter((contact) => contact.fav);
+  const groupedContacts = {};
+
+  allContacts.forEach((contact) => {
+    const group = getGroup(contact.firstName);
+
+    if (!groupedContacts[group]) {
+      groupedContacts[group] = [];
+    }
+
+    groupedContacts[group].push(contact);
+  });
+
+  const groupOrder = ["#", ..."ABCDEFGHIJKLMNOPQRSTUVWXYZ", ..."0123456789"];
+
+  const sortedGroups = Object.keys(groupedContacts).sort((a, b) => {
+    const aIndex = groupOrder.indexOf(a);
+    const bIndex = groupOrder.indexOf(b);
+
+    return descending ? bIndex - aIndex : aIndex - bIndex;
+  });
+
+  const sortHandler = () => {
+    setDescending((prev) => !prev);
   };
 
   return (
@@ -22,6 +82,16 @@ const NormalEntry = ({ user }) => {
             favBtn={true}
             mode="contact"
             onClose={setShowCreateContact}
+            saveContact={saveNewContact}
+          />
+        </div>
+      )}
+
+      {selectedContact && (
+        <div className="fixed inset-0 z-50 bg-slate-950">
+          <ContactProfile
+            contact={selectedContact}
+            onClose={() => setSelectedContact(null)}
           />
         </div>
       )}
@@ -62,14 +132,30 @@ const NormalEntry = ({ user }) => {
             All contacts <i className="ri-arrow-down-s-line"></i>
           </h1>
 
-          <button type="button">
+          <button type="button" onClick={sortHandler}>
             <i className="ri-menu-4-line"></i>
           </button>
         </div>
 
-        <ContactCard {...user} />
+        <ContactCard {...user} onClick={() => setSelectedContact(user)} />
 
-        {/* Contact lists will come here */}
+        <ContactList
+          headline="Favorite"
+          users={fav}
+          onContactClick={setSelectedContact}
+        />
+
+        <div>
+          <h2 className="my-1">All Contacts</h2>
+          {sortedGroups.map((group) => (
+            <ContactList
+              key={group}
+              headline={group}
+              users={groupedContacts[group]}
+              onContactClick={setSelectedContact}
+            />
+          ))}
+        </div>
       </main>
     </section>
   );

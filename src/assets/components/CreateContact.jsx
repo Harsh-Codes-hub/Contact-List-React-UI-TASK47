@@ -55,6 +55,7 @@ const CreateContact = ({ headline, favBtn, setUser, mode, saveContact, onClose }
     }
 
     setFormData(initialFormData);
+    onClose(false)
   };
 
   const favoriteHandler = () => {
