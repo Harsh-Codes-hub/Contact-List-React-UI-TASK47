@@ -8,6 +8,7 @@ import ContactProfile from "../components/ContactProfile";
 
 const NormalEntry = ({ user }) => {
   const [searchInput, setSearchInput] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [allContacts, setAllContacts] = useState(getContacts());
   const [showCreateContact, setShowCreateContact] = useState(false);
   const [descending, setDescending] = useState(false);
@@ -45,8 +46,24 @@ const NormalEntry = ({ user }) => {
   };
 
   useEffect(() => {}, [allContacts]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearchQuery(searchInput.trim().toLowerCase());
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchInput]);
 
   const fav = allContacts.filter((contact) => contact.fav);
+  const filteredContacts = allContacts.filter((contact) => {
+    const fullName = `${contact.firstName} ${contact.surname}`.toLowerCase();
+
+    return (
+      fullName.includes(searchQuery) ||
+      contact.phNo.includes(searchQuery) ||
+      contact.email.toLowerCase().includes(searchQuery)
+    );
+  });
   const groupedContacts = {};
 
   allContacts.forEach((contact) => {
@@ -73,13 +90,19 @@ const NormalEntry = ({ user }) => {
   };
 
   const deleteContact = (targetId) => {
-    const updatedContacts = allContacts.filter(
-      (contact) => contact.id !== targetId,
-    );
-
-    setAllContacts(updatedContacts);
-    saveContacts(updatedContacts);
-    setSelectedContact(null);
+    let choice = confirm("Are you sure?");
+    if (choice) {
+      const updatedContacts = allContacts.filter(
+        (contact) => contact.id !== targetId,
+      );
+  
+      setAllContacts(updatedContacts);
+      saveContacts(updatedContacts);
+      alert("Contact Deleted.")
+      setSelectedContact(null);
+    } else {
+      alert("Contact not deleted.")
+    }
   };
 
   return (
@@ -169,7 +192,22 @@ const NormalEntry = ({ user }) => {
           <h2 className="my-1">All Contacts</h2>
 
           {allContacts.length === 0 ? (
-            <p className="text-center py-4 text-slate-100">No Contacts</p>
+            <p className="text-center py-8 text-slate-100">No Contacts</p>
+          ) : searchQuery ? (
+            filteredContacts.length === 0 ? (
+              <p className="text-center py-8 text-slate-100">
+                No Contacts Found
+              </p>
+            ) : (
+              <ContactList
+                headline="Search Results"
+                users={filteredContacts}
+                onContactClick={(contact) => {
+                  setSelectedContact(contact);
+                  setSelectedIsUser(false);
+                }}
+              />
+            )
           ) : (
             sortedGroups.map((group) => (
               <ContactList

@@ -35,8 +35,10 @@ const ContactProfile = ({ contact, onClose, onDelete, selectedIsUser }) => {
             textSize={"text-6xl"}
           />
         )}
-
-        <h2 className="text-2xl font-semibold mt-6">{`${contact.firstName} ${contact.surname}`}</h2>
+        <div className="mt-4 flex flex-col items-center justify-center gap-1">
+          {contact.purpose ? <h6>{contact.purpose}</h6> : ""}
+          <h2 className="text-2xl font-semibold">{`${contact.firstName} ${contact.surname}`}</h2>
+        </div>
 
         <ProfileToolbar />
 
