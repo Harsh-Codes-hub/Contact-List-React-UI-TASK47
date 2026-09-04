@@ -13,7 +13,7 @@ const ContactList = ({ headline, users, onContactClick }) => {
             </li>
           ))
         ) : (
-          <h1 className="text-center">Empty List</h1>
+          <h1 className="text-center">No Contacts</h1>
         )}
       </ul>
     </section>

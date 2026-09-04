@@ -19,7 +19,7 @@ const ProfileToolbar = () => {
   ];
 
   return (
-    <ul className="flex items-center justify-center gap-3">
+    <ul className="flex items-center justify-center gap-3 mt-4">
       {toolData.map((tool, idx) => (
         <li key={`tool-${idx}`} className="flex items-center justify-center">
           <button type="button">

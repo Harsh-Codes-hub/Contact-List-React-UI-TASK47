@@ -12,6 +12,7 @@ const NormalEntry = ({ user }) => {
   const [showCreateContact, setShowCreateContact] = useState(false);
   const [descending, setDescending] = useState(false);
   const [selectedContact, setSelectedContact] = useState(null);
+  const [selectedIsUser, setSelectedIsUser] = useState(false);
 
   const saveNewContact = (contact) => {
     const newContact = {
@@ -43,9 +44,7 @@ const NormalEntry = ({ user }) => {
     return "#";
   };
 
-  useEffect(() => {
-    console.log(allContacts);
-  }, [allContacts]);
+  useEffect(() => {}, [allContacts]);
 
   const fav = allContacts.filter((contact) => contact.fav);
   const groupedContacts = {};
@@ -73,6 +72,16 @@ const NormalEntry = ({ user }) => {
     setDescending((prev) => !prev);
   };
 
+  const deleteContact = (targetId) => {
+    const updatedContacts = allContacts.filter(
+      (contact) => contact.id !== targetId,
+    );
+
+    setAllContacts(updatedContacts);
+    saveContacts(updatedContacts);
+    setSelectedContact(null);
+  };
+
   return (
     <section className="w-75 mx-auto py-1 px-2">
       {showCreateContact && (
@@ -92,6 +101,8 @@ const NormalEntry = ({ user }) => {
           <ContactProfile
             contact={selectedContact}
             onClose={() => setSelectedContact(null)}
+            onDelete={deleteContact}
+            selectedIsUser={selectedIsUser}
           />
         </div>
       )}
@@ -137,24 +148,41 @@ const NormalEntry = ({ user }) => {
           </button>
         </div>
 
-        <ContactCard {...user} onClick={() => setSelectedContact(user)} />
+        <ContactCard
+          {...user}
+          onClick={() => {
+            setSelectedContact(user);
+            setSelectedIsUser(true);
+          }}
+        />
 
         <ContactList
           headline="Favorite"
           users={fav}
-          onContactClick={setSelectedContact}
+          onContactClick={(contact) => {
+            setSelectedContact(contact);
+            setSelectedIsUser(false);
+          }}
         />
 
         <div>
           <h2 className="my-1">All Contacts</h2>
-          {sortedGroups.map((group) => (
-            <ContactList
-              key={group}
-              headline={group}
-              users={groupedContacts[group]}
-              onContactClick={setSelectedContact}
-            />
-          ))}
+
+          {allContacts.length === 0 ? (
+            <p className="text-center py-4 text-slate-100">No Contacts</p>
+          ) : (
+            sortedGroups.map((group) => (
+              <ContactList
+                key={group}
+                headline={group}
+                users={groupedContacts[group]}
+                onContactClick={(contact) => {
+                  setSelectedContact(contact);
+                  setSelectedIsUser(false);
+                }}
+              />
+            ))
+          )}
         </div>
       </main>
     </section>
