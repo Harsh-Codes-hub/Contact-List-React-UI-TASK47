@@ -66,7 +66,7 @@ const CreateContact = ({ headline, favBtn, setUser, mode, saveContact, onClose }
   };
 
   return (
-    <form className="h-dvh w-75 mx-auto py-2" onSubmit={submitHandler}>
+    <form className="h-dvh w-75 lg:w-200 mx-auto py-2" onSubmit={submitHandler}>
       <header className="flex items-center">
         {mode === "user" ? (
           <></>

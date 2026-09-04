@@ -3,7 +3,7 @@ import UserAvatar from "./UserAvatar";
 
 const ContactProfile = ({ contact, onClose, onDelete, selectedIsUser }) => {
   return (
-    <article className="h-full w-75 px-1 py-2 mx-auto">
+    <article className="h-full w-75 lg:w-200 px-1 py-2 mx-auto">
       <header className="flex items-center text-2xl">
         <button type="button" className="mr-auto" onClick={onClose}>
           <i className="ri-arrow-left-s-line"></i>

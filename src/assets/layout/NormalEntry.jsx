@@ -106,7 +106,7 @@ const NormalEntry = ({ user }) => {
   };
 
   return (
-    <section className="w-75 mx-auto py-1 px-2">
+    <section className="w-75 md:w-200 mx-auto py-1 px-2">
       {showCreateContact && (
         <div className="fixed inset-0 z-50 bg-gray-950 scrollbar-none">
           <CreateContact
@@ -139,7 +139,7 @@ const NormalEntry = ({ user }) => {
             name="searchContacts"
             id="searchContacts"
             placeholder="Search contacts"
-            className="mr-auto ml-2 outline-0"
+            className="mr-auto ml-2 outline-0 w-full"
             value={searchInput}
             onChange={searchInputHandler}
           />
